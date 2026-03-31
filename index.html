@@ -1,76 +1,253 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>the-pleasuredome</title>
-  <meta name="description" content="pleasure your dome. dome your pleasure."/>
-	<meta name="keywords" content="Yale"/>  
-  <link rel="stylesheet" href="./style.css">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">  
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>the-pleasuredome</title>
+        <meta
+            name="description"
+            content="pleasure your dome. dome your pleasure."
+        />
+        <meta name="keywords" content="Yale" />
+        <link rel="stylesheet" href="./style.css" />
+        <link rel="icon" type="image/x-icon" href="favicon.ico" />
 
-  <script src="https://cdn.jsdelivr.net/npm/p5@1.11.10/lib/p5.js"></script>
-</head>
+        <script src="https://cdn.jsdelivr.net/npm/p5@1.11.10/lib/p5.js"></script>
+    </head>
 
-<body>
-    <div class="container">
-        <div class="header">
-            <div class="logo">The Takeover</div>
-            <div class="search">Search...</div>
+    <body>
+        <div id="intro-overlay">
+            <canvas id="crack-canvas"></canvas>
+            <div id="intro-text">the takeover</div>
         </div>
-        
-        <div class="sidebar">
-            <div class="menu">
-                <ul>
-                    <li>Home</li>
-                    <li>About</li>
-                    <li>Services</li>
-                    <li>Contact</li>
-                </ul>
+
+        <main class="page">
+            <div class="page-inner">
+                <h1>SCAVENGER HUNT</h1>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Pellentesque vitae augue a turpis efficitur luctus.
+                </p>
+                <p>
+                    Integer pretium, sapien a interdum placerat, ipsum mauris
+                    consequat velit, non convallis urna risus vel justo.
+                </p>
+                <p>
+                    Curabitur posuere, sem id faucibus luctus, nisl libero
+                    scelerisque erat, sed efficitur risus odio sed lectus.
+                </p>
+                <p>
+                    Vestibulum ante ipsum primis in faucibus orci luctus et
+                    ultrices posuere cubilia curae; Donec suscipit magna ac
+                    tortor posuere, id eleifend nisl interdum.
+                </p>
+                <p>
+                    Aliquam erat volutpat. Sed non mauris nec nunc tristique
+                    commodo et eu velit.
+                </p>
             </div>
-            <div class="text">Sidebar Content</div>
-            <div class="text">More Info</div>
-        </div>
-        
-        <div class="nav">
-            <ul>
-                <li>Dashboard</li>
-                <li>Reports</li>
-                <li>Analytics</li>
-                <li>Settings</li>
-            </ul>
-        </div>
-        
-        <div class="article">
-            <div class="card">
-                <h3>Card 1</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            </div>
-            <div class="card">
-                <h3>Card 2</h3>
-                <p>Sed do eiusmod tempor incididunt ut labore et dolore magna.</p>
-            </div>
-            <div class="card">
-                <h3>Card 3</h3>
-                <p>Ut enim ad minim veniam, quis nostrud exercitation.</p>
-            </div>
-            <div class="card">
-                <h3>Card 4</h3>
-                <p>Duis aute irure dolor in reprehenderit in voluptate velit.</p>
-            </div>
-            <div class="card">
-                <h3>Card 5</h3>
-                <p>Excepteur sint occaecat cupidatat non proident.</p>
-            </div>
-            <div class="card">
-                <h3>Card 6</h3>
-                <p>Sunt in culpa qui officia deserunt mollit anim id est.</p>
-            </div>
-        </div>
-        
-        <div class="footer">
-            <p>&copy; 2025 My Website. All rights reserved.</p>
-        </div>
-    </div>
-</body>
+        </main>
+
+        <script>
+            (function () {
+                const overlay = document.getElementById("intro-overlay");
+                const canvas = document.getElementById("crack-canvas");
+                if (!overlay || !canvas) return;
+
+                const ctx = canvas.getContext("2d");
+                const MAX_CLICKS = 4;
+                let clicks = 0;
+                let shattering = false;
+
+                function resize() {
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                    redrawAllCracks();
+                }
+
+                const allCracks = [];
+
+                function redrawAllCracks() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    allCracks.forEach((crack) => drawCrackSet(crack));
+                }
+
+                function drawCrackSet(lines) {
+                    lines.forEach(({ pts, width, alpha }) => {
+                        ctx.beginPath();
+                        ctx.moveTo(pts[0].x, pts[0].y);
+                        for (let i = 1; i < pts.length; i++) {
+                            ctx.lineTo(pts[i].x, pts[i].y);
+                        }
+                        ctx.strokeStyle = `rgba(165, 28, 48, ${alpha})`;
+                        ctx.lineWidth = width;
+                        ctx.lineCap = "round";
+                        ctx.lineJoin = "round";
+                        ctx.stroke();
+                    });
+                }
+
+                function rand(min, max) {
+                    return min + Math.random() * (max - min);
+                }
+
+                function generateCrack(
+                    ox,
+                    oy,
+                    angle,
+                    length,
+                    depth,
+                    lines,
+                    width,
+                ) {
+                    if (depth === 0 || length < 10) return;
+
+                    const pts = [{ x: ox, y: oy }];
+                    let x = ox,
+                        y = oy;
+                    const segments = Math.floor(rand(6, 12));
+                    const segLen = length / segments;
+                    let direction = angle;
+
+                    for (let i = 0; i < segments; i++) {
+                        if (i > 0) {
+                            const kink =
+                                Math.random() < 0.35
+                                    ? rand(-0.9, 0.9)
+                                    : rand(-0.18, 0.18);
+                            direction += kink;
+                        }
+                        x += Math.cos(direction) * segLen;
+                        y += Math.sin(direction) * segLen;
+                        pts.push({ x, y });
+                    }
+
+                    lines.push({ pts, width, alpha: rand(0.8, 1.0) });
+
+                    const branches =
+                        depth > 1
+                            ? Math.floor(rand(2, 4))
+                            : Math.floor(rand(0, 2));
+                    for (let b = 0; b < branches; b++) {
+                        const branchPt = pts[Math.floor(rand(1, pts.length))];
+                        const branchAngle = direction + rand(-1.15, 1.15);
+                        generateCrack(
+                            branchPt.x,
+                            branchPt.y,
+                            branchAngle,
+                            length * rand(0.45, 0.7),
+                            depth - 1,
+                            lines,
+                            Math.max(1.0, width * 0.65),
+                        );
+                    }
+                }
+
+                function spawnCracks(ex, ey) {
+                    const lines = [];
+                    const numArms = Math.floor(rand(7, 12));
+                    for (let i = 0; i < numArms; i++) {
+                        const angle =
+                            (i / numArms) * Math.PI * 2 + rand(-0.25, 0.25);
+                        const len = rand(140, 320) * (1 + clicks * 0.25);
+                        generateCrack(
+                            ex,
+                            ey,
+                            angle,
+                            len,
+                            4,
+                            lines,
+                            rand(3.0, 5.5),
+                        );
+                    }
+                    allCracks.push(lines);
+                    drawCrackSet(lines);
+                }
+
+                function spawnEchoCracks(ex, ey) {
+                    // 2–3 secondary bloom points offset from the click
+                    const count = Math.floor(rand(2, 4));
+                    for (let i = 0; i < count; i++) {
+                        const dx = rand(
+                            -window.innerWidth * 0.3,
+                            window.innerWidth * 0.3,
+                        );
+                        const dy = rand(
+                            -window.innerHeight * 0.3,
+                            window.innerHeight * 0.3,
+                        );
+                        const ox = Math.max(
+                            50,
+                            Math.min(window.innerWidth - 50, ex + dx),
+                        );
+                        const oy = Math.max(
+                            50,
+                            Math.min(window.innerHeight - 50, ey + dy),
+                        );
+                        const lines = [];
+                        const numArms = Math.floor(rand(4, 8));
+                        for (let j = 0; j < numArms; j++) {
+                            const angle =
+                                (j / numArms) * Math.PI * 2 + rand(-0.4, 0.4);
+                            const len = rand(80, 200) * (1 + clicks * 0.2);
+                            generateCrack(
+                                ox,
+                                oy,
+                                angle,
+                                len,
+                                3,
+                                lines,
+                                rand(2.0, 4.0),
+                            );
+                        }
+                        allCracks.push(lines);
+                        drawCrackSet(lines);
+                    }
+                }
+
+                function shatter() {
+                    shattering = true;
+                    overlay.style.transition = "none";
+
+                    const flash = document.createElement("div");
+                    flash.style.cssText = `
+                        position:fixed;top:0;left:0;width:100%;height:100%;
+                        background:#fff;z-index:10001;pointer-events:none;
+                        opacity:0;transition:opacity 0.08s ease-in;
+                    `;
+                    document.body.appendChild(flash);
+
+                    requestAnimationFrame(() => {
+                        flash.style.opacity = "1";
+                        setTimeout(() => {
+                            flash.style.transition = "opacity 0.4s ease-out";
+                            flash.style.opacity = "0";
+                            overlay.style.transition =
+                                "opacity 0.5s ease-out, transform 0.5s ease-out";
+                            overlay.style.opacity = "0";
+                            overlay.style.transform = "scale(1.04)";
+                            setTimeout(() => {
+                                overlay.remove();
+                                flash.remove();
+                            }, 550);
+                        }, 100);
+                    });
+                }
+
+                overlay.addEventListener("click", function (e) {
+                    if (shattering) return;
+                    clicks++;
+                    spawnCracks(e.clientX, e.clientY);
+                    spawnEchoCracks(e.clientX, e.clientY);
+
+                    if (clicks >= MAX_CLICKS) {
+                        setTimeout(shatter, 200);
+                    }
+                });
+
+                window.addEventListener("resize", resize);
+                resize();
+            })();
+        </script>
+    </body>
 </html>
