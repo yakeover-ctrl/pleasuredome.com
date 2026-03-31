@@ -8,7 +8,7 @@
 body {
     font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Oxygen, Ubuntu, Cantarell, sans-serif;
     height: 100vh;
-    background-color: #f0f0f0;
+    background-color: #f5f5f5;
 }
 
 /* Main Container Grid */
@@ -23,7 +23,7 @@ body {
 
 /* Header with nested grid */
 .header {
-    background-color: #C90016;
+    background-color: #A51C30;
     grid-column: 1 / 3;
     display: grid;
     grid-template-columns: 1fr 2fr;
@@ -48,7 +48,7 @@ body {
 
 /* Sidebar with nested grids and centering */
 .sidebar {
-    background-color: #2196F3;
+    background-color: #00356b;
     grid-column: 1 / 2;
     grid-row: 2 / 4;
     display: grid;
@@ -88,12 +88,13 @@ body {
 
 /* Navigation with nested grid */
 .nav {
-    background-color: #FF9800;
+    background-color: #ffffff;
     grid-column: 2 / 3;
     display: grid;
     padding: 20px;
-    color: white;
+    color: #1a1a1a;
     border-radius: 8px;
+    border: 1px solid #e0e0e0;
 }
 
 .nav ul {
@@ -104,7 +105,7 @@ body {
 }
 
 .nav li {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: #f5f5f5;
     padding: 12px;
     border-radius: 4px;
     text-align: center;
@@ -113,12 +114,13 @@ body {
 }
 
 .nav li:hover {
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: #e8e8e8;
 }
 
 /* Article with auto-fitting grid cards */
 .article {
-    background-color: #9C27B0;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
     grid-column: 2 / 3;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -128,11 +130,12 @@ body {
 }
 
 .card {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: #f5f5f5;
     height: 200px;
     padding: 20px;
     border-radius: 8px;
-    color: white;
+    color: #1a1a1a;
+    border: 1px solid #e0e0e0;
     display: flex;
     flex-direction: column;
     transition: transform 0.2s, background-color 0.2s;
@@ -140,24 +143,24 @@ body {
 
 .card:hover {
     transform: translateY(-2px);
-    background-color: rgba(255, 255, 255, 0.15);
+    background-color: #ececec;
 }
 
 .card h3 {
     font-size: 18px;
     margin-bottom: 10px;
-    color: #fff;
+    color: #00356b;
 }
 
 .card p {
     font-size: 14px;
     line-height: 1.5;
-    opacity: 0.9;
+    opacity: 0.8;
 }
 
 /* Footer */
 .footer {
-    background-color: #607D8B;
+    background-color: #00356b;
     grid-column: 1 / 3;
     display: grid;
     place-items: center;
