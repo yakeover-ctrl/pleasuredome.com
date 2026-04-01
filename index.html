@@ -30,44 +30,32 @@
 
                 <div class="tracker-grid">
                     <article
-                        class="tracker-card"
+                        class="tracker-card tracker-card--found"
                         data-clue-title="Adams House"
-                        data-clue-image="./assets/clues_pngs/clues-01.png"
-                        tabindex="0"
-                        role="button"
-                        aria-haspopup="dialog"
                     >
                         <div class="tracker-card__image">
                             <img src="./assets/adams.png" alt="Adams House" />
                         </div>
                         <div class="tracker-card__body">
                             <h2>Adams House</h2>
-                            <p class="tracker-card__meta">click to see hint</p>
+                            <p class="tracker-card__meta">found!</p>
                         </div>
                     </article>
                     <article
-                        class="tracker-card"
+                        class="tracker-card tracker-card--found"
                         data-clue-title="Cabot House"
-                        data-clue-image="./assets/clues_pngs/clues-02.png"
-                        tabindex="0"
-                        role="button"
-                        aria-haspopup="dialog"
                     >
                         <div class="tracker-card__image">
                             <img src="./assets/cabot.png" alt="Cabot House" />
                         </div>
                         <div class="tracker-card__body">
                             <h2>Cabot House</h2>
-                            <p class="tracker-card__meta">click to see hint</p>
+                            <p class="tracker-card__meta">found!</p>
                         </div>
                     </article>
                     <article
-                        class="tracker-card"
+                        class="tracker-card tracker-card--found"
                         data-clue-title="Currier House"
-                        data-clue-image="./assets/clues_pngs/clues-03.png"
-                        tabindex="0"
-                        role="button"
-                        aria-haspopup="dialog"
                     >
                         <div class="tracker-card__image">
                             <img
@@ -77,7 +65,7 @@
                         </div>
                         <div class="tracker-card__body">
                             <h2>Currier House</h2>
-                            <p class="tracker-card__meta">click to see hint</p>
+                            <p class="tracker-card__meta">found!</p>
                         </div>
                     </article>
                     <article
@@ -116,12 +104,8 @@
                         </div>
                     </article>
                     <article
-                        class="tracker-card"
+                        class="tracker-card tracker-card--found"
                         data-clue-title="Kirkland House"
-                        data-clue-image="./assets/clues_pngs/clues-06.png"
-                        tabindex="0"
-                        role="button"
-                        aria-haspopup="dialog"
                     >
                         <div class="tracker-card__image">
                             <img
@@ -131,7 +115,7 @@
                         </div>
                         <div class="tracker-card__body">
                             <h2>Kirkland House</h2>
-                            <p class="tracker-card__meta">click to see hint</p>
+                            <p class="tracker-card__meta">found!</p>
                         </div>
                     </article>
                     <article
@@ -711,6 +695,7 @@
                 };
 
                 cards.forEach((card) => {
+                    if (card.classList.contains("tracker-card--found")) return;
                     card.addEventListener("click", () => openModal(card));
                     card.addEventListener("keydown", (event) => {
                         if (
