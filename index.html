@@ -24,8 +24,8 @@
         <main class="tracker-page">
             <section class="tracker-shell">
                 <header class="tracker-header">
-                    <p class="tracker-kicker">The Mendacium Search</p>
-                    <h1>scavenger hunt</h1>
+                    <p class="tracker-kicker">Scavenger Hunt</p>
+                    <h1>The Mendacium Search</h1>
                 </header>
 
                 <div class="tracker-grid">
@@ -437,13 +437,23 @@
                     return Math.floor(rand(min, max + 1));
                 }
 
-                function generateCrack(ox, oy, angle, length, depth, lines, width) {
+                function generateCrack(
+                    ox,
+                    oy,
+                    angle,
+                    length,
+                    depth,
+                    lines,
+                    width,
+                ) {
                     if (depth === 0 || length < 10) return;
 
                     // 2-3 straight segments joined at 1-2 sharp discrete kinks
                     const numKinks = randInt(1, 2);
                     const pts = [{ x: ox, y: oy }];
-                    let x = ox, y = oy, dir = angle;
+                    let x = ox,
+                        y = oy,
+                        dir = angle;
 
                     const fracs = [];
                     let pool = 1.0;
@@ -458,7 +468,9 @@
                     for (let i = 0; i < fracs.length; i++) {
                         if (i > 0) {
                             // Sharp discrete kink: 8-22 degrees
-                            dir += (Math.random() < 0.5 ? 1 : -1) * rand(0.14, 0.38);
+                            dir +=
+                                (Math.random() < 0.5 ? 1 : -1) *
+                                rand(0.14, 0.38);
                         }
                         x += Math.cos(dir) * length * fracs[i];
                         y += Math.sin(dir) * length * fracs[i];
@@ -468,20 +480,35 @@
 
                     lines.push({ pts, width, alpha: rand(0.8, 1.0) });
 
-                    const numBranches = depth > 1 ? randInt(1, 2) : randInt(0, 1);
+                    const numBranches =
+                        depth > 1 ? randInt(1, 2) : randInt(0, 1);
                     for (let b = 0; b < numBranches; b++) {
                         // Branch preferentially at kink points
                         let bx, by, bDir;
                         if (kinkData.length > 0 && Math.random() < 0.65) {
                             const k = kinkData[randInt(0, kinkData.length - 1)];
-                            bx = k.x; by = k.y; bDir = k.dir;
+                            bx = k.x;
+                            by = k.y;
+                            bDir = k.dir;
                         } else {
                             const pt = pts[randInt(1, pts.length - 1)];
-                            bx = pt.x; by = pt.y; bDir = dir;
+                            bx = pt.x;
+                            by = pt.y;
+                            bDir = dir;
                         }
                         // Acute branch angle: 25-45 degrees
-                        const branchAngle = bDir + (Math.random() < 0.5 ? 1 : -1) * rand(0.44, 0.78);
-                        generateCrack(bx, by, branchAngle, length * rand(0.4, 0.65), depth - 1, lines, Math.max(1.0, width * 0.6));
+                        const branchAngle =
+                            bDir +
+                            (Math.random() < 0.5 ? 1 : -1) * rand(0.44, 0.78);
+                        generateCrack(
+                            bx,
+                            by,
+                            branchAngle,
+                            length * rand(0.4, 0.65),
+                            depth - 1,
+                            lines,
+                            Math.max(1.0, width * 0.6),
+                        );
                     }
                 }
 
@@ -497,41 +524,68 @@
                             const curr = pairs[i];
                             const next = pairs[(i + 1) % pairs.length];
                             const a1 = curr.a;
-                            const a2 = next.a <= a1 ? next.a + Math.PI * 2 : next.a;
+                            const a2 =
+                                next.a <= a1 ? next.a + Math.PI * 2 : next.a;
                             const gap = a2 - a1;
 
                             // Skip wide gaps (>~120°), skip randomly, skip if radius exceeds arm
-                            if (gap > Math.PI * 0.67 || Math.random() < 0.35) continue;
-                            if (radius > curr.len * 0.92 || radius > next.len * 0.92) continue;
+                            if (gap > Math.PI * 0.67 || Math.random() < 0.35)
+                                continue;
+                            if (
+                                radius > curr.len * 0.92 ||
+                                radius > next.len * 0.92
+                            )
+                                continue;
 
                             // Faceted arc — polyline with slight per-point jitter
-                            const steps = Math.max(3, Math.round((gap * radius) / 18));
+                            const steps = Math.max(
+                                3,
+                                Math.round((gap * radius) / 18),
+                            );
                             const pts = [];
                             for (let s = 0; s <= steps; s++) {
-                                const a = a1 + gap * (s / steps) + rand(-0.02, 0.02);
+                                const a =
+                                    a1 + gap * (s / steps) + rand(-0.02, 0.02);
                                 const r = radius + rand(-3, 3);
-                                pts.push({ x: cx + Math.cos(a) * r, y: cy + Math.sin(a) * r });
+                                pts.push({
+                                    x: cx + Math.cos(a) * r,
+                                    y: cy + Math.sin(a) * r,
+                                });
                             }
-                            lines.push({ pts, width: rand(1.0, 2.2), alpha: rand(0.5, 0.78) });
+                            lines.push({
+                                pts,
+                                width: rand(1.0, 2.2),
+                                alpha: rand(0.5, 0.78),
+                            });
                         }
                     }
                 }
 
                 function spawnCracks(ex, ey) {
                     const lines = [];
-                    const numArms = randInt(Math.max(5, config.mainArms - 1), config.mainArms + 2);
-                    const armAngles = [];
-                    const armLengths = [];
-
+                    const numArms = randInt(
+                        Math.max(4, config.mainArms - 2),
+                        config.mainArms + 2,
+                    );
                     for (let i = 0; i < numArms; i++) {
-                        const angle = (i / numArms) * Math.PI * 2 + rand(-0.2, 0.2);
-                        const len = rand(config.mainLength * 0.7, config.mainLength * 1.25) * (1 + clicks * 0.25);
-                        armAngles.push(angle);
-                        armLengths.push(len);
-                        generateCrack(ex, ey, angle, len, 4, lines, rand(3.0, 5.5));
+                        const angle =
+                            (i / numArms) * Math.PI * 2 + rand(-0.25, 0.25);
+                        const len =
+                            rand(
+                                config.mainLength * 0.7,
+                                config.mainLength * 1.25,
+                            ) *
+                            (1 + clicks * 0.25);
+                        generateCrack(
+                            ex,
+                            ey,
+                            angle,
+                            len,
+                            4,
+                            lines,
+                            rand(3.0, 5.5),
+                        );
                     }
-
-                    drawRings(ex, ey, armAngles, armLengths, lines);
                     allCracks.push(lines);
                     drawCrackSet(lines);
                 }
